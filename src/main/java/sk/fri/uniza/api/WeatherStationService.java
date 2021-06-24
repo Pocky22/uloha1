@@ -1,6 +1,5 @@
 package sk.fri.uniza.api;
 
-
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -39,14 +38,12 @@ public interface WeatherStationService {
     Call<List<WeatherData>> getHistoryWeather(@Path("station") String station,
                                         @Query("from") String from,
                                         @Query("to") String to);
-    // ... getHistoryWeather(station, from, to);
 
     @GET("/weather/{station}/history")
     Call<List<WeatherData>> getHistoryWeather(@Path("station") String station,
-                                        @Query("from") String from,
-                                        @Query("to") String to,
-                                        @Query("fields") List<String> fields);
-    // ... getHistoryWeather(station, from, to, fields);
+                                                  @Query("from") String from,
+                                                  @Query("to") String to,
+                                                  @Query("fields") List<String> fields);
 
     // ... getToken(authorization, claims);
 

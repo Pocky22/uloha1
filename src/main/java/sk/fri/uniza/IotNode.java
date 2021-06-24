@@ -1,8 +1,14 @@
 package sk.fri.uniza;
 
+import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import sk.fri.uniza.api.WeatherStationService;
+import sk.fri.uniza.model.WeatherData;
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 
 public class IotNode {
@@ -27,4 +33,27 @@ public class IotNode {
     public WeatherStationService getWeatherStationService() {
         return weatherStationService;
     }
+
+    public Optional<Double> getAverageTemperature(String station, String from, String to) {
+        Call<List<WeatherData>> historyWeather =
+                weatherStationService.getHistoryWeather(station,from,to);
+
+        try {
+            Response<List<WeatherData>> response = historyWeather.execute();
+
+            if (response.isSuccessful()) { // Dotaz na server bol neúspešný
+                //Získanie údajov vo forme Zoznam lokacií
+                List<WeatherData> body = response.body();
+                System.out.println(body);
+
+                return Optional.of(body.stream().mapToDouble(weatherData -> weatherData.getAirTemperature().doubleValue()).sum()/body.size());
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
+    }
+
 }
