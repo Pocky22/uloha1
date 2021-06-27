@@ -8,11 +8,13 @@ import sk.fri.uniza.model.WeatherData;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+
+
 
 public class App {
     public static void main(String[] args) {
         IotNode iotNode = new IotNode();
+
         // Vytvorenie požiadavky na získanie údajov o aktuálnom počasí z
         // meteo stanice s ID: station_2
         Call<Map<String, String>> currentWeather =
@@ -75,10 +77,10 @@ public class App {
 
         Call<List<WeatherData>> historyWeather =
                 iotNode.getWeatherStationService()
-                        .getHistoryWeather("station_2", "11/05/2021 10:00" , "12/05/2021 12:00");
+                        .getHistoryWeather("station_2", "11/05/2021 10:00", "12/05/2021 12:00");
         try {
             // Odoslanie požiadavky na server pomocou REST rozhranie
-            Response<List<WeatherData>>response = historyWeather.execute();
+            Response<List<WeatherData>> response = historyWeather.execute();
 
             if (response.isSuccessful()) { // Dotaz na server bol neúspešný
                 //Získanie údajov vo forme inštancie triedy WeatherData
@@ -90,8 +92,8 @@ public class App {
             e.printStackTrace();
         }
 
-        Optional<Double> body = iotNode.getAverageTemperature("station_2","20/06/2021 15:00","20/06/2021 19:00");
+        Double body = iotNode.getAverageTemperature("station_2", "20/06/2021 15:00", "20/06/2021 19:00");
         System.out.print("Priemerna teplota za obdobie je: ");
-        body.ifPresent(priemernaTeplota -> System.out.println(priemernaTeplota));
+        System.out.println(body);
     }
 }
